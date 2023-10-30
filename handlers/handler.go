@@ -6,8 +6,11 @@ import (
 	"fortest/models"
 	"fortest/router"
 	"log"
+	"math/rand"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Controller struct {
@@ -290,4 +293,92 @@ func (c *Controller) GetDeveloperObjectsSummary(ctx *router.Context) {
 	}
 
 	ctx.OK(response)
+}
+
+func (c *Controller) UploadLayout(ctx *router.Context) {
+	//err := ctx.Request.ParseMultipartForm(64 << 20)
+	//if err != nil {
+	//	ctx.BadRequest(err)
+	//	return
+	//}
+	//
+	//fileHeaders := ctx.Request.MultipartForm.File["upload[]"]
+	//var filenames []string
+	//
+	//for _, fileHeader := range fileHeaders {
+	//	newFilename := generateRandomFilename(fileHeader.Filename)
+	//	file, err := fileHeader.Open()
+	//	if err != nil {
+	//		ctx.BadRequest(err)
+	//		return
+	//	}
+	//	_, err = utils.UploadImage(file, newFilename, "."+constant.UploadDirNewBuildingLayouts)
+	//	if err != nil {
+	//		ctx.Internal(err)
+	//		return
+	//	}
+	//	filenames = append(filenames, newFilename)
+	//}
+	//
+	//ctx.OK(fmt.Sprintf("new_filename: %v", filenames))
+
+}
+
+func (c *Controller) UploadObjectPhotos(ctx *router.Context) {
+	//err := ctx.Request.ParseMultipartForm(64 << 20)
+	//if err != nil {
+	//	ctx.BadRequest(err)
+	//	return
+	//}
+	//
+	//fileHeaders := ctx.Request.MultipartForm.File["upload[]"]
+	//var filenames []string
+	//
+	//for _, fileHeader := range fileHeaders {
+	//	newFilename := generateRandomFilename(fileHeader.Filename)
+	//	file, err := fileHeader.Open()
+	//	if err != nil {
+	//		ctx.BadRequest(err)
+	//		return
+	//	}
+	//	_, err = utils.UploadImage(file, newFilename, "."+constant.UploadDirNewBuildingObjects)
+	//	if err != nil {
+	//		ctx.Internal(err)
+	//		return
+	//	}
+	//	filenames = append(filenames, newFilename)
+	//}
+	//
+	//ctx.OK(fmt.Sprintf("new_filename: %v", filenames))
+
+}
+
+func (c *Controller) UploadDevLogo(ctx *router.Context) {
+	//err := ctx.Request.ParseMultipartForm(64 << 20)
+	//if err != nil {
+	//	ctx.BadRequest(err)
+	//	return
+	//}
+	//
+	//file, fileHeader, err := ctx.Request.FormFile("file")
+	//if err != nil {
+	//	ctx.BadRequest(err)
+	//	return
+	//}
+	//defer file.Close()
+	//
+	////	newFilename := generateRandomFilename(fileHeader.Filename)
+	////filename, err := utils.UploadImage(file, newFilename, "."+constant.UploadDirNewBuildingLogo)
+	//if err != nil {
+	//	ctx.Internal(err)
+	//	return
+	//}
+	////ctx.OK(fmt.Sprintf("new_filename: %v", filename))
+}
+
+func generateRandomFilename(filename string) string {
+	extension := filepath.Ext(filename)
+	rand.Seed(time.Now().UnixNano())
+	randomName := fmt.Sprintf("%d%s", rand.Int(), extension)
+	return randomName
 }

@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"fortest/core"
-	"fortest/db"
+	"fortest/routes"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	my_handlers "fortest/handlers"
 	"github.com/gorilla/handlers"
 	"go.uber.org/zap"
 )
@@ -19,16 +21,17 @@ func main() {
 
 	l, err := zap.NewDevelopment()
 	if err != nil {
-		panic(err)
+		fmt.Printf("New looger error %v", err)
+		os.Exit(1)
 	}
 
 	zap.ReplaceGlobals(l)
 
-	db.InitDB()
+	//db.InitDB()
 
-	var router = routes.Init(controllers.New(core.New()), appConfig)
+	var router = routes.Init(my_handlers.New(core.New()))
 
-	zap.S().Infof("Starting Server on address http://%s:%s", appConfig.Host, appConfig.Port)
+	zap.S().Infof("Starting Server on address http://%s:%s", "localhost", ":8080")
 	origins := handlers.AllowedOrigins([]string{"*"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"})
 	credentials := handlers.AllowCredentials()
@@ -57,7 +60,7 @@ func main() {
 	<-c
 
 	// Create a deadline to wait for.
-	ctx, cancel := context.WithTimeout(context.Background(), wait)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 	defer cancel()
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
