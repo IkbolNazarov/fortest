@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"fortest/core"
+	"fortest/db"
 	"fortest/routes"
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	my_handlers "fortest/handlers"
+
 	"github.com/gorilla/handlers"
 	"go.uber.org/zap"
 )
@@ -27,7 +27,7 @@ func main() {
 
 	zap.ReplaceGlobals(l)
 
-	//db.InitDB()
+	db.InitDB()
 
 	var router = routes.Init(my_handlers.New(core.New()))
 
@@ -38,7 +38,7 @@ func main() {
 	headers := handlers.AllowedHeaders([]string{"Accept", "Authorization", "Accept-Language", "Content-Type", "Content-Language", "Origin"})
 	cors := handlers.CORS(credentials, methods, origins, headers)
 	srv := &http.Server{
-		Addr:         "localhost:8080",
+		Addr:         "8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 		IdleTimeout:  60 * time.Second,
@@ -51,13 +51,13 @@ func main() {
 		}
 	}()
 
-	c := make(chan os.Signal, 1)
+	// c := make(chan os.Signal, 1)
 	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
 	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	// signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
 	// Block until we receive our signal.
-	<-c
+	// <-c
 
 	// Create a deadline to wait for.
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
