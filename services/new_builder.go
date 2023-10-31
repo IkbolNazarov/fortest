@@ -6,7 +6,7 @@ import (
 )
 
 type NewBuilderServices interface {
-	AddDeveloper(developer models.Developer) error
+	AddDeveloper(developer models.Developer)  (models.Developer,error)
 	GetDeveloperWithObjectsByID(devID uint) (models.DeveloperWithObjectsResponse, error)
 	GetDeveloperByID(id uint) (*models.Developer, error)
 }
@@ -19,7 +19,7 @@ func NewBuilderService(repo repositories.BuilderRepository) NewBuilderServices {
 	return &builderServiceImpl{repo: repo}
 }
 
-func (s *builderServiceImpl) AddDeveloper(developer models.Developer) error {
+func (s *builderServiceImpl) AddDeveloper(developer models.Developer) (models.Developer,error) {
 	return s.repo.CreateDeveloper(developer)
 }
 

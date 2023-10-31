@@ -29,10 +29,7 @@ func (repo *objectRepositoryImpl) CreateObject(object *models.Object) error {
 }
 
 func (repo *objectRepositoryImpl) DeleteObjectByID(id int) error {
-	if err := repo.Connection.Where("object_id = ?", id).Delete(&models.Apartment{}).Error; err != nil {
-		return err
-	}
-	if err := repo.Connection.Delete(&models.Object{}, id).Error; err != nil {
+	if err := repo.Connection.Delete(&models.Object{ID: uint(id)}).Error; err != nil {
 		return err
 	}
 	return nil

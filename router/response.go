@@ -2,10 +2,8 @@ package router
 
 import (
 	"encoding/json"
-	"fortest/validator"
 	"log"
 	"net/http"
-	"strings"
 )
 
 type Response struct {
@@ -64,15 +62,6 @@ func OKMeta(w http.ResponseWriter, meta map[string]interface{}, data interface{}
 
 func BadRequest(w http.ResponseWriter, data interface{}) {
 	Respond(w, NewResponse(http.StatusBadRequest, nil, data))
-}
-
-func ValidationFailed(w http.ResponseWriter, err error) {
-	data := strings.Builder{}
-	for _, e := range validator.CheckValidationErrors(err) {
-		data.Write([]byte(", " + e.Error()))
-	}
-
-	Respond(w, NewResponse(http.StatusUnprocessableEntity, nil, data.String()))
 }
 
 func BadRequestMeta(w http.ResponseWriter, meta map[string]interface{}, data interface{}) {

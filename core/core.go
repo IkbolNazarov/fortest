@@ -4,11 +4,9 @@ import (
 	"fortest/db"
 	"fortest/repositories"
 	"fortest/services"
-	"fortest/validator"
 )
 
 type Core struct {
-	Validator            *validator.Validator
 	NewObjectService     services.NewObjectServices
 	NewAppartmentService services.NewAppartmentServices
 	NewBuilderService    services.NewBuilderServices
@@ -16,7 +14,6 @@ type Core struct {
 
 func New() *Core {
 	core := &Core{}
-	core.Validator = validator.New()
 	DB := db.GetDB()
 	newObjectsRepository := repositories.NewObjectsRepository(DB)
 	newBuilderRepository := repositories.NewBuilderRepository(DB)

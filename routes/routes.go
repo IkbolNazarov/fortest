@@ -8,39 +8,34 @@ import (
 func Init(c *handlers.Controller) *router.Router {
 	r := router.NewRouter().Group("spec")
 
-	r.SetValidator(c.Core.Validator)
 	r.StrictSlash(true)
 
 	dashboard := r.Group("/dashboard")
 	{
 
-		newBuilding := dashboard.Group("/newBuilding")
+		newBuilding := dashboard.Group("/new_building")
 		{
-			newBuilding.POST("/dev_logo", c.UploadDevLogo)
-			newBuilding.POST("/object_photos", c.UploadObjectPhotos)
-			newBuilding.POST("/layout", c.UploadLayout)
-			newBuilding.GET("/announcements", c.GetAllObjectsHandler)
-			newBuilding.GET("/popular_announcements", c.GetPopularObjectsHandler)
-			newBuilding.GET("/object/{id}", c.GetObject)
+			newBuilding.GET("/announcements", c.GetAllObjectsHandler)             //DONE
+			newBuilding.GET("/popular_announcements", c.GetPopularObjectsHandler) //DONE
 
 			newBuildingObjects := newBuilding.Group("/objects")
 			{
-				newBuildingObjects.DELETE("/{id}", c.DeleteObjectByID)
-				newBuildingObjects.PUT("/{id}", c.UpdateObjectWithApartmentsHandler)
-				newBuildingObjects.POST("/{object_id}/apartments", c.AddApartment)
+				newBuildingObjects.POST("/object_photos", c.UploadObjectPhotos)      //DONE надо папку создать
+				newBuildingObjects.POST("/layout", c.UploadLayout)                   //DONE надо папку создать
+				newBuildingObjects.GET("/{id}", c.GetObject)                         //DONE
+				newBuildingObjects.DELETE("/{id}", c.DeleteObjectByID)               //DONE
+				newBuildingObjects.PUT("/{id}", c.UpdateObjectWithApartmentsHandler) //failed:id
+				newBuildingObjects.POST("/{object_id}/apartments", c.AddApartment)   //failed:id
 			}
 
 			newBuildingDevelopers := newBuilding.Group("/developers")
 			{
-				newBuildingDevelopers.POST("", c.AddDeveloper)
-				newBuildingDevelopers.POST("/{developer_id}/objects", c.AddObject)
-				newBuildingDevelopers.GET("/developers/{id}", c.GetDeveloperByIDHandler)
-			}
-
-			newBuildingDeveloper := newBuilding.Group("/developer")
-			{
-				newBuildingDeveloper.GET("/{id}/objects", c.GetObjectsByDeveloperID)
-				newBuildingDeveloper.GET("/{id}/objects_summary", c.GetDeveloperObjectsSummary)
+				newBuildingDevelopers.POST("/logo", c.UploadDevLogo)                             //DONE надо папку создать
+				newBuildingDevelopers.POST("", c.AddDeveloper)                                   //DONE
+				newBuildingDevelopers.POST("/{developer_id}/objects", c.AddObject)               //DONE
+				newBuildingDevelopers.GET("/{id}", c.GetDeveloperByIDHandler)                    //надо починить (нет всех данных)
+				newBuildingDevelopers.GET("/{id}/objects", c.GetObjectsByDeveloperID)            //надо починить (излишние данные)
+				newBuildingDevelopers.GET("/{id}/objects_summary", c.GetDeveloperObjectsSummary) //DONE
 			}
 		}
 	}

@@ -28,24 +28,23 @@ func (c *Controller) AddApartment(ctx *router.Context) {
 		return
 	}
 
-	objectID := ctx.Param("object_id")
-	intID, err := strconv.Atoi(objectID)
-	if err != nil {
-		ctx.BadRequest("Invalid object ID")
+	objectID, err := strconv.Atoi(ctx.Param("object_id"))
+	if err!=nil{
+		ctx.BadRequest(err)
 		return
 	}
 
 	for i := range apartmentsResponse.Apartments {
-		apartmentsResponse.Apartments[i].ObjectID = uint(intID)
+		apartmentsResponse.Apartments[i].ObjectID = uint(objectID)
 	}
 
-	err = c.Core.NewAppartmentService.AddApartment(apartmentsResponse.Apartments)
+	app, err := c.Core.NewAppartmentService.AddApartment(apartmentsResponse.Apartments)
 	if err != nil {
 		ctx.Internal(err)
 		return
 	}
 
-	ctx.OK(apartmentsResponse.Apartments)
+	ctx.OK(app)
 }
 
 func (c *Controller) AddDeveloper(ctx *router.Context) {
@@ -55,13 +54,13 @@ func (c *Controller) AddDeveloper(ctx *router.Context) {
 		return
 	}
 
-	err := c.Core.NewBuilderService.AddDeveloper(developer)
+	dev, err := c.Core.NewBuilderService.AddDeveloper(developer)
 	if err != nil {
 		ctx.Internal(err)
 		return
 	}
 
-	ctx.OK(developer)
+	ctx.OK(dev)
 }
 
 func (c *Controller) GetObjectsByDeveloperID(ctx *router.Context) {

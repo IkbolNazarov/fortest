@@ -15,13 +15,14 @@ func NewBuilderRepository(conn *gorm.DB) BuilderRepository {
 }
 
 type BuilderRepository interface {
-	CreateDeveloper(developer models.Developer) error
+	CreateDeveloper(developer models.Developer)  (models.Developer,error)
 	GetDeveloperWithObjectsByID(devID uint) (models.DeveloperWithObjectsResponse, error)
 	GetDeveloperByID(id uint) (*models.Developer, error)
 }
 
-func (repo *builderRepositoryImpl) CreateDeveloper(developer models.Developer) error {
-	return repo.Connection.Table(models.DevelopersTable()).Create(&developer).Error
+func (repo *builderRepositoryImpl) CreateDeveloper(developer models.Developer)  (models.Developer,error) {
+	err :=  repo.Connection.Table(models.DevelopersTable()).Create(&developer).Error
+	return developer, err 
 }
 
 func (repo *builderRepositoryImpl) GetDeveloperByID(id uint) (*models.Developer, error) {

@@ -14,9 +14,14 @@ func NewAppartmentsRepository(conn *gorm.DB) NewAppartmentRepository {
 }
 
 type NewAppartmentRepository interface {
-	CreateApartment(apartments []models.Apartment) error
+	CreateApartment(apartments []models.Apartment) ([]models.Apartment, error)
 }
 
-func (repo *newAppartmentRepositoryImpl) CreateApartment(apartments []models.Apartment) error {
-	return repo.Connection.Table(models.AppartmentsTable()).Create(&apartments).Error
+func (repo *newAppartmentRepositoryImpl) CreateApartment(apartments []models.Apartment) ([]models.Apartment, error) {
+	for _, apartment := range apartments {
+		if err := repo.Connection.Table(models.AppartmentsTable()).Create(&apartment).Error; err != nil {
+			return nil, err
+		}
+	}
+	return apartments, nil
 }

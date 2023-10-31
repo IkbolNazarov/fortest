@@ -1,13 +1,10 @@
 package router
 
 import (
-	"fortest/validator"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
-
-var defaultValidator = validator.New()
 
 type Router struct {
 	*mux.Router
@@ -16,8 +13,7 @@ type Router struct {
 
 func NewRouter() *Router {
 	return &Router{
-		Router:    mux.NewRouter(),
-		Validator: defaultValidator,
+		Router: mux.NewRouter(),
 	}
 }
 

@@ -7,12 +7,12 @@ import (
 )
 
 type ApartmentsResponse struct {
-	Apartments []Apartment `json:"appartments"`
+	Apartments []Apartment `json:"apartments"`
 }
 
 type Apartment struct {
 	ID       uint    `gorm:"primaryKey" json:"id"`
-	ObjectID uint    `gorm:"foreignKey" json:"object_id"`
+	ObjectID uint    `gorm:"type:int;foreignKey" json:"object_id"`
 	Type     string  `json:"type"`
 	Area     float64 `json:"area"`
 	Floor    int     `json:"floor"`
@@ -28,7 +28,7 @@ type ApartmentType struct {
 }
 
 func AppartmentsTable() string {
-	tableName := "apartments"
+	tableName := "public.apartments"
 	return tableName
 }
 
@@ -66,7 +66,7 @@ type DeveloperObjectsResponse struct {
 }
 
 func DevelopersTable() string {
-	tableName := "developers"
+	tableName := "public.developers"
 	return tableName
 }
 
@@ -95,7 +95,7 @@ type Object struct {
 }
 
 func ObjectsTable() string {
-	tableName := "objects"
+	tableName := "public.objects"
 	return tableName
 }
 
