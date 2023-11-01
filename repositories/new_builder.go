@@ -35,14 +35,29 @@ func (repo *builderRepositoryImpl) GetDeveloperByID(id uint) (*models.Developer,
 
 func (repo *builderRepositoryImpl) GetDeveloperWithObjectsByID(devID uint) (models.DeveloperWithObjectsResponse, error) {
 	var developer models.Developer
+	var objects []models.ObjectResp
 	var response models.DeveloperWithObjectsResponse
 
-	err := repo.Connection.Preload("Objects").First(&developer, devID).Error
+
+	err := repo.Connection.First(&developer, devID).Error
+	if err != nil {
+		return response, err
+	}
+
+	err = repo.Connection.Table(models.ObjectsTable()).Where("developer_id = ?", devID).Find(&objects).Error
 	if err != nil {
 		return response, err
 	}
 
 	response.DeveloperInfo = developer
-	response.Objects = developer.Objects
+	response.Objects = objects
+
 	return response, nil
 }
+
+
+
+
+
+
+

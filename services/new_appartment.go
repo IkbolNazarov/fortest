@@ -6,7 +6,7 @@ import (
 )
 
 type NewAppartmentServices interface {
-	AddApartment(apartments []models.Apartment)([]models.Apartment, error)
+	AddApartment(apartments models.ApartmentsResponse)(models.ApartmentsResponse, error)
 }
 
 type appartmentServiceImpl struct {
@@ -17,6 +17,6 @@ func NewAppartmentService(repo repositories.NewAppartmentRepository) NewAppartme
 	return &appartmentServiceImpl{repo: repo}
 }
 
-func (s *appartmentServiceImpl) AddApartment(apartments []models.Apartment)([]models.Apartment, error) {
+func (s *appartmentServiceImpl) 	AddApartment(apartments models.ApartmentsResponse)(models.ApartmentsResponse, error){
 	return s.repo.CreateApartment(apartments)
 }

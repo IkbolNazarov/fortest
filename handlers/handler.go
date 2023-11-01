@@ -38,7 +38,7 @@ func (c *Controller) AddApartment(ctx *router.Context) {
 		apartmentsResponse.Apartments[i].ObjectID = uint(objectID)
 	}
 
-	app, err := c.Core.NewAppartmentService.AddApartment(apartmentsResponse.Apartments)
+	app, err := c.Core.NewAppartmentService.AddApartment(apartmentsResponse)
 	if err != nil {
 		ctx.Internal(err)
 		return

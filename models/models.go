@@ -6,6 +6,53 @@ import (
 	"github.com/lib/pq"
 )
 
+type Object struct {
+	ID           uint           `gorm:"primaryKey" json:"id"`
+	Name         string         `gorm:"not null" json:"name"`
+	Description  string         `json:"description"`
+	Address      string         `json:"address"`
+	Latitude     string         `json:"latitude"`
+	Longitude    string         `json:"longitude"`
+	Logo         string         `json:"logo"`
+	Phone        string         `json:"phone"`
+	MinPrice     float64        `json:"min_price"`
+	MaxPrice     float64        `json:"max_price"`
+	MinArea      float64        `json:"min_area"`
+	MaxArea      float64        `json:"max_area"`
+	Status       string         `json:"status"`
+	Class        string         `json:"class"`
+	Photos       pq.StringArray `gorm:"type:text[]" json:"photos"`
+	YoutubeLink  string         `json:"youtube_link"`
+	Amenities    pq.Int32Array  `gorm:"type:integer[]" json:"amenities"`
+	DeveloperID  uint           `json:"developer_id"`
+	Developer    Developer      `gorm:"foreignKey:DeveloperID"`
+	CreationDate time.Time      `gorm:"column:created_at, default:CURRENT_TIMESTAMP()" json:"created_at"`
+	Apartments   []Apartment    `gorm:"foreignKey:ObjectID"`
+}
+
+type ObjectResp struct {
+	ID           uint           `gorm:"primaryKey" json:"id"`
+	Name         string         `gorm:"not null" json:"name"`
+	Description  string         `json:"description"`
+	Address      string         `json:"address"`
+	Latitude     string         `json:"latitude"`
+	Longitude    string         `json:"longitude"`
+	Logo         string         `json:"logo"`
+	Phone        string         `json:"phone"`
+	MinPrice     float64        `json:"min_price"`
+	MaxPrice     float64        `json:"max_price"`
+	MinArea      float64        `json:"min_area"`
+	MaxArea      float64        `json:"max_area"`
+	Status       string         `json:"status"`
+	Class        string         `json:"class"`
+	Photos       pq.StringArray `gorm:"type:text[]" json:"photos"`
+	YoutubeLink  string         `json:"youtube_link"`
+	Amenities    pq.Int32Array  `gorm:"type:integer[]" json:"amenities"`
+	DeveloperID  uint           `json:"developer_id"`
+	CreationDate time.Time      `gorm:"column:created_at" json:"created_at"`
+	Apartments   []Apartment    `gorm:"foreignKey:ObjectID"`
+}
+
 type ApartmentsResponse struct {
 	Apartments []Apartment `json:"apartments"`
 }
@@ -32,6 +79,12 @@ func AppartmentsTable() string {
 	return tableName
 }
 
+type DeveloperWithObjectsResponse struct {
+	DeveloperInfo Developer   `json:"developer_info"`
+	Objects       []ObjectResp    `json:"objects"`
+}
+
+
 type Developer struct {
 	ID                   uint     `gorm:"primaryKey" json:"id"`
 	Name                 string   `gorm:"not null" json:"name"`
@@ -48,10 +101,6 @@ type Developer struct {
 	Objects              []Object `gorm:"foreignKey:DeveloperID"`
 }
 
-type DeveloperWithObjectsResponse struct {
-	DeveloperInfo Developer `json:"developer"`
-	Objects       []Object  `json:"objects"`
-}
 
 type DeveloperObjectsSummary struct {
 	CreationDate time.Time `json:"created_at"`
@@ -70,29 +119,7 @@ func DevelopersTable() string {
 	return tableName
 }
 
-type Object struct {
-	ID           uint           `gorm:"primaryKey" json:"id"`
-	Name         string         `gorm:"not null" json:"name"`
-	Description  string         `json:"description"`
-	Address      string         `json:"address"`
-	Latitude     string         `json:"latitude"`
-	Longitude    string         `json:"longitude"`
-	Logo         string         `json:"logo"`
-	Phone        string         `json:"phone"`
-	MinPrice     float64        `json:"min_price"`
-	MaxPrice     float64        `json:"max_price"`
-	MinArea      float64        `json:"min_area"`
-	MaxArea      float64        `json:"max_area"`
-	Status       string         `json:"status"`
-	Class        string         `json:"class"`
-	Photos       pq.StringArray `gorm:"type:text[]" json:"photos"`
-	YoutubeLink  string         `json:"youtube_link"`
-	Amenities    pq.Int32Array  `gorm:"type:integer[]" json:"amenities"`
-	DeveloperID  uint           `json:"developer_id"`
-	Developer    Developer      `gorm:"foreignKey:DeveloperID"`
-	CreationDate time.Time      `gorm:"column:created_at" json:"created_at"`
-	Apartments   []Apartment    `gorm:"foreignKey:ObjectID"`
-}
+
 
 func ObjectsTable() string {
 	tableName := "public.objects"
